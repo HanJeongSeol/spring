@@ -18,7 +18,17 @@ import com.spring.biz.user.impl.UserDAO;
 @WebServlet("*.do")
 public class DispatcherServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	private HandlerMapping handlerMapping;
+	private ViewResolver viewResolver;
+	
+	@Override
+	public void init() throws ServletException {
+		super.init();
+		handlerMapping = new HandlerMapping();
+		viewResolver = new ViewResolver();
+		viewResolver.setPrefix("./");	// 위치경로 
+		viewResolver.setSufix(".jsp");	// 파일타입 
+	}
 	public DispatcherServlet() {
 		super();
 
@@ -126,6 +136,44 @@ public class DispatcherServlet extends HttpServlet {
 			
 			BoardDAO boardDAO = new BoardDAO();
 			boardDAO.insertBoard(vo);
+			
+			
+			// 3. 화면 네비게이션(목록페이지로 이동)
+			response.sendRedirect("getBoardList.do");
+		} else if("/updateBoard.do".equals(path)) {
+			System.out.println(">> 게시글 입력");
+			// 1. 전달받은 데이터 추출(확인)
+			String seq = request.getParameter("seq");
+			String title = request.getParameter("title");
+			String writer = request.getParameter("writer");
+			String content = request.getParameter("content");
+
+			// 2. DB 연동처리(데이터 입력)
+			BoardVO vo = new BoardVO();
+			vo.setSeq(Integer.parseInt(seq));
+			vo.setTitle(title);
+			vo.setWriter(writer);
+			vo.setContent(content);
+			
+			BoardDAO boardDAO = new BoardDAO();
+			boardDAO.updateBoard(vo);
+			
+			
+			// 3. 화면 네비게이션(목록페이지로 이동)
+			response.sendRedirect("getBoardList.do");
+		}  else if("/deleteBoard.do".equals(path)) {
+			System.out.println(">> 게시글 입력");
+			// 1. 전달받은 데이터 추출(확인)
+			String seq = request.getParameter("seq");
+
+
+			// 2. DB 연동처리(데이터 입력)
+			BoardVO vo = new BoardVO();
+			vo.setSeq(Integer.parseInt(seq));
+
+			
+			BoardDAO boardDAO = new BoardDAO();
+			boardDAO.deleteBoard(vo);
 			
 			
 			// 3. 화면 네비게이션(목록페이지로 이동)
