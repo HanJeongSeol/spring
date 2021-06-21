@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- 생성자를 이용한 의존성 주입(DI) -->
+	<bean id="tv2Samsung" class="polymorphism2.SamsungTV">
+		<!-- SamsungTV를 생성할 때 생성자를 이용한다. reference를 통해 sony도 생성한다. -->
+		<constructor-arg ref="sony"></constructor-arg>
+		<constructor-arg value="1000000"></constructor-arg>
+	</bean>
+
+	<bean id="sony" class="polymorphism2.SonySpeacker" />
+
+	<!-- 생성자에 전달되는 값 순서, sony, 200, 100 -->
+	<bean id="tv2Samsung2" class="polymorphism2.SamsungTV">
+		<constructor-arg ref="sony"></constructor-arg>
+		<constructor-arg value="100"></constructor-arg>
+		<constructor-arg value="200"></constructor-arg>
+	</bean>
+
+
+	<bean id="tv2Samsung3" class="polymorphism2.SamsungTV">
+		<constructor-arg index ="0" ref="sony"></constructor-arg>
+		<constructor-arg index ="2" value="100"></constructor-arg>
+		<constructor-arg index ="1" value="200"></constructor-arg>
+	</bean>
+	
+	<!-- =========== set 메소드(setter)를 이용한 의존주입(DI) ========== -->
+	<bean id="tv3Samsung" class="polymorphism3.SamsungTV">
+		<property name="speacker" ref="sony3"></property>
+		<property name="price" value="1000000"></property>
+		<property name="width" value="220"></property>
+		<property name="height" value="330"></property>
+	</bean>
+	
+	<bean id="sony3" class="polymorphism3.SonySpeacker">
+	</bean>
+	<!-- p 태그 새용해서 property(set)할 수 있다 -->
+	<bean id="tv3Samsung2" class="polymorphism3.SamsungTV" p:speacker-ref="sony3"
+	p:price="45600" p:height="330" p:width="220">
+	
+	</bean>
+</beans>
